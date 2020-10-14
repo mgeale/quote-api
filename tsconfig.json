@@ -1,0 +1,8 @@
+{
+  "include": ["src", "test"],
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "outDir": "./built"
+  }
+}
