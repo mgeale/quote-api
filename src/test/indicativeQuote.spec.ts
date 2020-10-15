@@ -1,7 +1,7 @@
-import fetchIndicativeQuoteAsync from './indicativeQuote';
-import { TakerRequest, IndicativeQuote } from '@0x/quote-server';
+import fetchIndicativeQuoteAsync from '../strategies/indicativeQuote';
+import { TakerRequest } from '@0x/quote-server';
 import { BigNumber } from '@0x/utils';
-import {SINGLE_DAI} from '../constants';
+import { SINGLE_DAI } from './constants';
 
 describe('indicative quote', () => {
   it('should return quote', async done => {
