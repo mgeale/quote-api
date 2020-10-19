@@ -1,9 +1,7 @@
 import { promisify } from 'util';
 import { ClientOpts, Callback, RedisClient } from 'redis';
-const DEFAULT_URL = 'redis://127.0.0.1:6379';
-const PREFIX = '__prefix:';
 
-interface Client {
+export interface Client {
   get(key: string): Promise<string>;
   set(key: string, val: string): Promise<any>;
   setex(key: string, expires: string, val: string): Promise<any>;

@@ -1,17 +1,17 @@
 import redis from 'redis-mock';
-let client;
-const DEFAULT_URL = 'redis://127.0.0.1:6379';
-const PREFIX = '__prefix:';
 import {
   initRedisConnectionAsync,
   getRedisConnection,
 } from '../connections/redis';
+import {REDIS_URL, REDIS_PREFIX} from '../constants';
+
+let client;
 
 beforeAll(async done => {
   await initRedisConnectionAsync(
     redis.createClient({
-      url: DEFAULT_URL,
-      prefix: PREFIX,
+      url: REDIS_URL,
+      prefix: REDIS_PREFIX,
     })
   );
   done();
