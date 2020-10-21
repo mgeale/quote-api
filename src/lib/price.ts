@@ -1,5 +1,11 @@
-export async function getPrice() {
-    const response = await fetch("https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0xe41d2489571d322189246dafa5ebde1f4699f498&vs_currencies=usd");
+export async function getPrice(...contractAddresses: string[]) {
+    const usd = 'usd';
+    const url = `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${contractAddresses.join(',')}&vs_currencies=${usd}`
+    const response = await fetch(url);
     const price = await response.json();
-    return price["0xe41d2489571d322189246dafa5ebde1f4699f498"]["usd"];
+    const target = {};
+    for (let address of contractAddresses) {
+        Object.assign(target, {[address]: price[address][usd]});
+    }
+    return target;
 }

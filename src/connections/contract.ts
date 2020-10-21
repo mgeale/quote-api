@@ -18,19 +18,22 @@ let minABI = JSON.parse(`[
     }
   ]`);
 
-let connectionIfExists;
 
-export function getContractConnection(): Contract {
-  if (!connectionIfExists) {
+let contractConnections = {};
+
+export function getContractConnection(contractAddress: string): Contract {
+  if (!contractConnections[contractAddress]) {
     throw new Error('Contract connection not initialized');
   }
-  return connectionIfExists;
+  return contractConnections[contractAddress];
 }
 
-export async function initContractConnectionAsync(address: string): Promise<void> {
-  if (connectionIfExists) {
+export async function initContractConnectionAsync(contractAddress: string): Promise<void> {
+  if (Object.keys(contractConnections).length > 0) {
     throw new Error('Contract connection already exists');
   }
   const web3 = getWeb3Connection();
-  connectionIfExists = new web3.eth.Contract(minABI, address);
+  Object.assign(contractConnections, {
+    [contractAddress]: new web3.eth.Contract(minABI, contractAddress)
+  });
 }

@@ -5,7 +5,7 @@ import fetchIndicativeQuoteAsync from './strategies/indicativeQuote';
 import { fetchFirmQuoteAsync } from './strategies/firmQuote';
 import { submitFillAsync } from './strategies/submitFill';
 import {initRedisConnectionAsync} from './connections/redis';
-import {REDIS_URL, REDIS_PREFIX, ZRX_CONTRACT, RPC_URL} from './constants';
+import {REDIS_URL, REDIS_PREFIX, TOKEN_ADDRESS, RPC_URL} from './constants';
 import redis from 'redis';
 import {initWeb3ConnectionAsync} from './connections/web3';
 import {initContractConnectionAsync} from './connections/contract';
@@ -38,7 +38,7 @@ var logger = (
   next();
 };
 
-const connections = async () => {
+const connections = async (): Promise<void> => {
   await initRedisConnectionAsync(
     redis.createClient({
       url: REDIS_URL,
@@ -46,7 +46,7 @@ const connections = async () => {
     })
   );
   await initWeb3ConnectionAsync(RPC_URL);
-  await initContractConnectionAsync(ZRX_CONTRACT);
+  await initContractConnectionAsync(TOKEN_ADDRESS.WETH);
 };
 
 connections();

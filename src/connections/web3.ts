@@ -13,5 +13,5 @@ export async function initWeb3ConnectionAsync(url: string): Promise<void> {
   if (connectionIfExists) {
     throw new Error('Web3 connection already exists');
   }
-  connectionIfExists = new Web3(url);
+  connectionIfExists = new Web3('wss://mainnet.infura.io/ws/v3/3dcd0498b23141808ec76afa97cf2bda');
 }
