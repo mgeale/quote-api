@@ -4,7 +4,7 @@ export async function getPrice(...contractAddresses: string[]) {
     const response = await fetch(url);
     const price = await response.json();
     const target = {};
-    for (let address of contractAddresses) {
+    for (const address of contractAddresses) {
         Object.assign(target, {[address]: price[address][usd]});
     }
     return target;
