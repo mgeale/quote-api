@@ -6,8 +6,9 @@
   },
   "scripts": {
     "build": "gulp",
+    "gcp-build": "gulp",
     "test": "yarn build && node built/test/index.js",
-    "start": "yarn build && node built/index.js",
+    "start": "node built/index.js",
     "pretty": "prettier --write 'src/**/*'",
     "lint": "tslint --project ./ --format stylish",
     "lint:fix": "tslint --project ./ --fix"

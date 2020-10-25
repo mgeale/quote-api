@@ -18,10 +18,9 @@ export const mnemonicWallet = new MnemonicWalletSubprovider({
 export async function fetchFirmQuoteAsync(
   takerRequest: TakerRequest
 ): Promise<FirmQuote | undefined> {
+  const providerEngine = getProvider();
 
-  const pe = getProvider();
-
-  const contractWrappers = new ContractWrappers(pe, { chainId: 1337 });
+  const contractWrappers = new ContractWrappers(providerEngine, { chainId: 1 });
   const exchangeAddress = contractWrappers.contractAddresses.exchange;
 
   const makerAssetAmount = Web3Wrapper.toBaseUnitAmount(takerRequest.sellAmountBaseUnits, DECIMALS);
@@ -49,7 +48,7 @@ export async function fetchFirmQuoteAsync(
     takerFee: ZERO,
   };
 
-  const signedOrder = await signatureUtils.ecSignOrderAsync(pe, order, MAKER_WALLET);
+  const signedOrder = await signatureUtils.ecSignOrderAsync(providerEngine, order, MAKER_WALLET);
 
   return <FirmQuote> {
     signedOrder

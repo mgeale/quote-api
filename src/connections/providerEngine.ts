@@ -21,7 +21,7 @@ const determineProvider = (): Web3ProviderEngine => {
         );
     } else {*/
         pe.addProvider(new RPCSubprovider(NETWORK_CONFIGS.rpcUrl));
-    //}
+    //}sub
     providerUtils.startProviderEngine(pe);
     return pe;
 };

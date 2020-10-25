@@ -4,18 +4,17 @@ import { assetDataUtils } from '@0x/order-utils';
 import {getPrice} from '../lib/price';
 import {MAKER_WALLET} from '../constants';
 import { getProvider } from '../connections/providerEngine';
-import { ContractWrappers, ERC20TokenContract } from '@0x/contract-wrappers';
+import { ERC20TokenContract } from '@0x/contract-wrappers';
 
 export default async function fetchIndicativeQuoteAsync(
   takerRequest: TakerRequest
 ): Promise<IndicativeQuote | undefined> {
 
   const providerEngine = getProvider();
-
   const tokenAddress = new ERC20TokenContract(takerRequest.sellTokenAddress, providerEngine);
 
   const balanceAsync = tokenAddress.balanceOf(MAKER_WALLET).callAsync();
-  const priceAsync = {[takerRequest.sellTokenAddress]: 1, [takerRequest.buyTokenAddress]: 2}//getPrice(takerRequest.buyTokenAddress, takerRequest.sellTokenAddress);
+  const priceAsync = getPrice(takerRequest.buyTokenAddress, takerRequest.sellTokenAddress);
   const [balance, prices] = await Promise.all([balanceAsync, priceAsync]);
 
   const price = prices[takerRequest.sellTokenAddress]/prices[takerRequest.buyTokenAddress]

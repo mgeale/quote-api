@@ -34,4 +34,4 @@ export const MAINNET_CONFIGS: NetworkSpecificConfigs = {
     networkId: MAINNET_NETWORK_ID,
     chainId: MAINNET_NETWORK_ID,
 };
-export const NETWORK_CONFIGS = GANACHE_CONFIGS;
+export const NETWORK_CONFIGS = MAINNET_CONFIGS;
