@@ -1,21 +1,22 @@
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { TakerRequest, FirmQuote } from '@0x/quote-server';
-import { MAKER_WALLET } from '../constants';
-import { DECIMALS } from '../constants';
+import { getRedisConnection } from '../connections/redis';
 
-export async function fetchFirmQuoteAsync(
+export default async function fetchFirmQuoteAsync(
   takerRequest: TakerRequest
 ): Promise<FirmQuote | undefined> {
 
-  const prices = await getPrice(takerRequest.buyTokenAddress, takerRequest.sellTokenAddress);
+  const redisConnection = getRedisConnection();
+
+  const prices = await redisConnection.read('key'); // update key
   const price = prices[takerRequest.sellTokenAddress]/prices[takerRequest.buyTokenAddress];
 
   const takerAmount = takerRequest.sellAmountBaseUnits.multipliedBy(price);
 
-  const makerAssetAmount = Web3Wrapper.toBaseUnitAmount(takerRequest.sellAmountBaseUnits, DECIMALS);
-  const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(takerAmount, DECIMALS);
+  const makerAssetAmount = Web3Wrapper.toBaseUnitAmount(takerRequest.sellAmountBaseUnits, 18);
+  const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(takerAmount, 18);
 
-  const signedOrder = await signOrder(MAKER_WALLET, takerRequest.takerAddress, makerAssetAmount, takerAssetAmount);
+  const signedOrder = await signOrder(takerRequest.takerAddress, makerAssetAmount, takerAssetAmount);
 
   return <FirmQuote> {
     signedOrder

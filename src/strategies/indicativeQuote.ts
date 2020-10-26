@@ -1,15 +1,16 @@
 import { TakerRequest, IndicativeQuote } from '@0x/quote-server';
 import { BigNumber } from '@0x/utils';
 import { assetDataUtils } from '@0x/order-utils';
-import {getPrice} from '../lib/price';
-import {MAKER_WALLET} from '../constants';
+import { getRedisConnection } from '../connections/redis';
 
 export default async function fetchIndicativeQuoteAsync(
   takerRequest: TakerRequest
 ): Promise<IndicativeQuote | undefined> {
 
-  const balanceAsync = getBalance(MAKER_WALLET, takerRequest.buyTokenAddress);
-  const pricesAsync = getPrice(takerRequest.buyTokenAddress, takerRequest.sellTokenAddress);
+  const redisConnection = getRedisConnection();
+
+  const balanceAsync = redisConnection.read('key'); // update key
+  const pricesAsync = redisConnection.read('key'); // update key
   const [balanceString, prices] = await Promise.all([balanceAsync, pricesAsync]);
 
   const balance = new BigNumber(balanceString);

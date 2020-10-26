@@ -1,13 +1,11 @@
+import redis from 'redis';
 import { NextFunction } from 'express';
 import express from 'express';
-import { serverRoutes, Quoter } from '@0x/quote-server';
 import fetchIndicativeQuoteAsync from './strategies/indicativeQuote';
-import { fetchFirmQuoteAsync } from './strategies/firmQuote';
-import { submitFillAsync } from './strategies/submitFill';
-// import {initRedisConnectionAsync} from './connections/redis';
-import { initProviderAsync } from './connections/providerEngine';
-import {REDIS_URL, REDIS_PREFIX, TOKEN_ADDRESS, RPC_URL} from './constants';
-import redis from 'redis';
+import fetchFirmQuoteAsync from './strategies/firmQuote';
+import submitFillAsync from './strategies/submitFill';
+import { serverRoutes, Quoter } from '@0x/quote-server';
+import { initRedisConnectionAsync } from './connections/redis';
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -37,9 +35,16 @@ var logger = (
   next();
 };
 
-(async () => {
-  await initProviderAsync();
-})();
+const connections = async () => {
+  await initRedisConnectionAsync(
+    redis.createClient({
+      url: 'redis://127.0.0.1:6379',
+      prefix: '__prefix:',
+    })
+  );
+};
+
+connections();
 
 app.use(logger);
 
