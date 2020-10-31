@@ -9,14 +9,17 @@ export default async function fetchIndicativeQuoteAsync(
 
   const redisConnection = getRedisConnection();
 
-  const balanceAsync = redisConnection.read('key'); // update key
-  const pricesAsync = redisConnection.read('key'); // update key
-  const [balanceString, prices] = await Promise.all([balanceAsync, pricesAsync]);
+  const balanceAsync = redisConnection.read(`bal-${takerRequest.buyTokenAddress}`);
+  const buyTokenPriceAsync = redisConnection.read(takerRequest.buyTokenAddress);
+  const sellTokenPriceAsync = redisConnection.read(takerRequest.sellTokenAddress);
+  const [balanceString, buyTokenPrice, sellTokenPrice] = await Promise.all([balanceAsync, buyTokenPriceAsync, sellTokenPriceAsync]);
 
   const balance = new BigNumber(balanceString);
-  const price = prices[takerRequest.sellTokenAddress]/prices[takerRequest.buyTokenAddress];
+  const sellPrice = new BigNumber(sellTokenPrice);
+  const buyPrice = new BigNumber(buyTokenPrice);
+  const price = sellPrice.dividedBy(buyPrice);
 
-  if (!price || balance.isZero()) return;
+  if (price.isNaN() || balance.isZero()) return;
 
   const sellAmount = takerRequest.sellAmountBaseUnits.multipliedBy(price);
   const takerAmount = balance > sellAmount ? sellAmount : balance;

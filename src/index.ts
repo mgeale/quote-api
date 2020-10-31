@@ -38,7 +38,7 @@ var logger = (
 const connections = async () => {
   await initRedisConnectionAsync(
     redis.createClient({
-      url: 'redis://127.0.0.1:6379',
+      url: 'redis://10.71.30.67:6379',
       prefix: '__prefix:',
     })
   );

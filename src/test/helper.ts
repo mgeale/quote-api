@@ -3,11 +3,11 @@ import {
   initRedisConnectionAsync,
   getRedisConnection,
 } from '../connections/redis';
-import {REDIS_URL, REDIS_PREFIX} from '../constants';
+// import {REDIS_URL, REDIS_PREFIX} from '../constants';
 
 let client;
 
-beforeAll(async done => {
+/*beforeAll(async done => {
   await initRedisConnectionAsync(
     redis.createClient({
       url: REDIS_URL,
@@ -21,4 +21,4 @@ afterAll(done => {
   client = getRedisConnection();
   client.disconnect();
   done();
-});
+});*/

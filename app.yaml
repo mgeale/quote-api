@@ -1,2 +1,5 @@
 runtime: nodejs12
 service: quote-api
+
+vpc_access_connector:
+    name: 'projects/tidy-arcade-293604/locations/australia-southeast1/connectors/testting-connector'
